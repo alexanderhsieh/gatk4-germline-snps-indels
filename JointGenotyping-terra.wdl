@@ -89,7 +89,7 @@ workflow JointGenotyping {
     File dbsnp_resource_vcf_index = dbsnp_vcf_index
 
     # Runtime attributes
-    String gatk_docker = "broadinstitute/gatk:4.1.4.0"
+    String? gatk_docker = "broadinstitute/gatk:4.1.4.0"
     String gatk_path = "/gatk/gatk"
     String picard_docker = "us.gcr.io/broad-gotc-prod/gatk4-joint-genotyping:yf_fire_crosscheck_picard_with_nio_fast_fail_fast_sample_map"
 
