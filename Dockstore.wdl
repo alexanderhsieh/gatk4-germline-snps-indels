@@ -45,9 +45,8 @@ version 1.0
 
 # WORKFLOW DEFINITION 
 
-#import "./tasks/JointGenotypingTasks-terra.wdl" as Tasks
 
-import "https://raw.githubusercontent.com/gatk-workflows/gatk4-germline-snps-indels/2.0.0/tasks/JointGenotypingTasks-terra.wdl" as Tasks
+import "https://raw.githubusercontent.com/alexanderhsieh/gatk4-germline-snps-indels/master/tasks/JointGenotypingTasks-terra.wdl" as Tasks
 
 # Joint Genotyping for hg38 Whole Genomes and Exomes (has not been tested on hg19)
 workflow JointGenotyping {
