@@ -4,7 +4,7 @@ version 1.0
 task CheckSamplesUnique {
   input {
     File sample_name_map
-    Int sample_num_threshold = 50
+    Int sample_num_threshold = 0
   }
 
   command {
