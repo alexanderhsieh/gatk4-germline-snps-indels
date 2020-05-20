@@ -268,9 +268,20 @@ workflow JointGenotyping {
       preemptible_tries = preemptible_tries
   }
 
+  ## NOTE: ADDED THIS STEP TO GET UNFILTERED COMBINED GVCF
+  call Tasks.GatherVcfs as nofilt_GatherVcf {
+    input:
+      input_vcfs = genotyped_vcf,
+      output_vcf_name = callset_name + ".vcf.gz",
+      disk_size = medium_disk,
+      gatk_docker = gatk_docker,
+      gatk_path = gatk_path,
+      preemptible_tries = preemptible_tries
+  }
+
   output {
-    File output_gvcf = TotallyRadicalGatherVcfs.output_vcf
-    File output_gvcf_index = TotallyRadicalGatherVcfs.output_vcf_index
+    File output_nofilt_vcf = nofilt_GatherVcf.output_vcf
+    File output_gnofilt_vcf_index = nofilt_GatherVcf.output_vcf_index
 
     File output_vcf = SitesOnlyGatherVcf.output_vcf
     File output_vcf_index = SitesOnlyGatherVcf.output_vcf_index
