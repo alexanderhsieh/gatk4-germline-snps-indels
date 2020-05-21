@@ -143,6 +143,7 @@ task gDBtogVCF{
     File genomicsdb
     File interval
     File ref_fasta
+    File ref_fasta_index
     String callset_name
 
     Int disk_size

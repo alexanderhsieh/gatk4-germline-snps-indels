@@ -183,6 +183,7 @@ workflow JointGenotyping {
         genomicsdb = ImportGVCFs.output_genomicsdb,
         interval = unpadded_intervals[idx],
         ref_fasta = ref_fasta,
+        ref_fasta_index = ref_fasta_index,
         callset_name = callset_name,
         disk_size = medium_disk,
         gatk_docker = gatk_docker,
