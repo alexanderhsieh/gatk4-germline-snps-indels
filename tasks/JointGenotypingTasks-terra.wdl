@@ -159,10 +159,13 @@ task gDBtogVCF{
   command <<<
     set -euo pipefail
 
+    tar -xf ~{genomicsdb}
+    WORKSPACE=$(basename ~{genomicsdb} .tar)
+
     ~{gatk_path} --java-options -Xms8g \
       SelectVariants \
       -R ~{ref_fasta} \
-      -V ~{genomicsdb} \
+      -V gendb://$WORKSPACE \
       -L ~{interval} \
       -O ~{callset_name}.g.vcf
   >>>
