@@ -187,7 +187,6 @@ workflow JointGenotyping {
         ref_dict = ref_dict,
         callset_name = callset_name,
         disk_size = medium_disk,
-        gatk_docker = gatk_docker,
         gatk_path = gatk_path,
         preemptible_tries = preemptible_tries
 
