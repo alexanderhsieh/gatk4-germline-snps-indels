@@ -178,6 +178,16 @@ workflow JointGenotyping {
         preemptible_tries = preemptible_tries
     }
 
+    call Tasks.gDBtogVCF{
+      input:
+        genomicsdb = ImportGVCFs.output_genomicsdb,
+        interval = unpadded_intervals[idx],
+        ref_fasta = ref_fasta,
+        callset_name = callset_name,
+        disk_size = medium_disk
+
+    }
+
     if (use_gnarly_genotyper) {
 
       call Tasks.SplitIntervalList as GnarlyIntervalScatterDude {
@@ -278,12 +288,27 @@ workflow JointGenotyping {
       preemptible_tries = preemptible_tries
   }
 
+  ## NOTE: 05/21 ADDED THIS STEP TO GET UNFILTERED COMBINED GVCF
+  call Tasks.GatherVcfs as GVCF_GatherVcf {
+    input:
+      input_vcfs = gDBtogVCF.output_gvcf,
+      output_vcf_name = callset_name + ".g.vcf.gz",
+      disk_size = medium_disk,
+      gatk_docker = gatk_docker,
+      gatk_path = gatk_path,
+      preemptible_tries = preemptible_tries
+  }
+  
+
   output {
     File output_nofilt_vcf = nofilt_GatherVcf.output_vcf
     File output_gnofilt_vcf_index = nofilt_GatherVcf.output_vcf_index
 
     File output_vcf = SitesOnlyGatherVcf.output_vcf
     File output_vcf_index = SitesOnlyGatherVcf.output_vcf_index
+
+    File output_gvcf = GVCF_GatherVcf.output_vcf
+    File output_gvcf_index = GVCF_GatherVcf.output_vcf_index
 
     # Output the interval list generated/used by this run workflow.
     Array[File] output_intervals = SplitIntervalList.output_intervals
