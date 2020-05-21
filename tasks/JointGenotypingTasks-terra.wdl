@@ -136,6 +136,52 @@ task ImportGVCFs {
   }
 }
 
+## AH: 5/21 added SelectVariants task to extract Combined gVCF from genomicsDB format
+task gDBtogVCF{
+  
+  input {
+    File genomicsdb
+    File interval
+    File ref_fasta
+    String callset_name
+
+    Int disk_size
+
+    # Using a nightly version of GATK containing fixes for GenomicsDB
+    # https://github.com/broadinstitute/gatk/pull/5899
+    String gatk_docker = "us.gcr.io/broad-gotc-prod/gatk-nightly:2019-05-07-4.1.2.0-5-g53d015e4f-NIGHTLY-SNAPSHOT"
+    String gatk_path
+    String preemptible_tries
+  }
+
+  command <<<
+    set -euo pipefail
+
+    ~{gatk_path} --java-options -Xms8g \
+      SelectVariants \
+      -R ~{ref_fasta} \
+      -V ~{genomicsdb} \
+      -L ~{interval} \
+      -G StandardAnnotation \
+      -O ~{callset_name}.g.vcf
+  >>>
+
+  runtime {
+    memory: "26 GiB"
+    cpu: 4
+    disks: "local-disk " + disk_size + " HDD"
+    docker: gatk_docker
+    preemptible: preemptible_tries
+  }
+
+  output {
+    File output_gvcf = "~{callset_name}.g.vcf"
+    File output_gvcf_index = "~{callset_name}.g.vcf.tbi"
+  }
+
+}
+
+
 task GenotypeGVCFs {
 
   input {
