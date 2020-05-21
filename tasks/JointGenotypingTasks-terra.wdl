@@ -162,7 +162,6 @@ task gDBtogVCF{
       -R ~{ref_fasta} \
       -V ~{genomicsdb} \
       -L ~{interval} \
-      -G StandardAnnotation \
       -O ~{callset_name}.g.vcf
   >>>
 
